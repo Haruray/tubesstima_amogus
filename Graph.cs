@@ -46,12 +46,14 @@ public class Graph
 		if (!nodes.Contains(toNode)){
 			nodes.Add(toNode);
         }
-
+		nodes.Sort();
 		pointingTo[findIdxInNodes(thisNode)].Add(toNode);
 		pointingTo[findIdxInNodes(thisNode)].Sort(); //Diurutkan berdasarkan abjad
+		pointingTo[findIdxInNodes(toNode)].Add(thisNode);
+		pointingTo[findIdxInNodes(toNode)].Sort();
 	}
 
-	public List<string> SearchPathWithBFS(string from, string target){
+	public List<string> SearchPath(string from, string target, string with){
 		//Mencari jalur terpendek dari node from ke target dengan BFS
 		//Cara kerjanya adalah mencatat predecessor dari iterasi tiap node yang dicari oleh BFS, kemudian kita mencari path nya secara mundur,
 		//yaitu mulai target hingga from
@@ -59,14 +61,38 @@ public class Graph
 		string []pred = new string[totalnode]; //predecessor
 		List<string> path = new List<string>(); //seperti namanya, list ini adalah jalur dari from ke target
 		string currentNode = target; //node yang sedang diproses
-
-		if (BFS(from, target, pred)) { //jika target ditemukan oleh algoritma BFS, maka proses pencarian path dimulai
-			path.Add(currentNode);
-			while (pred[findIdxInNodes(currentNode)] != "#None#"){ //Jika node bukan merupakan node from, maka proses akan diteruskan (karena node from predecessornya adalah "#None#"
-				path.Add(pred[findIdxInNodes(currentNode)]);
-				currentNode = pred[findIdxInNodes(currentNode)]; //berjalan mundur
-            }
+		if (with == "BFS")
+        {
+			if (BFS(from, target, pred))
+			{ //jika target ditemukan oleh algoritma BFS, maka proses pencarian path dimulai
+				path.Add(currentNode);
+				while (pred[findIdxInNodes(currentNode)] != "#None#")
+				{ //Jika node bukan merupakan node from, maka proses akan diteruskan (karena node from predecessornya adalah "#None#"
+					path.Add(pred[findIdxInNodes(currentNode)]);
+					currentNode = pred[findIdxInNodes(currentNode)]; //berjalan mundur
+				}
+			}
 		}
+
+		else if (with == "DFS")
+        { //menggunakan DfS
+
+			Boolean[] visit = new Boolean[totalnode];
+			Boolean found = false;
+			for (int i = 0; i < totalnode; i++){
+				pred[i] = "#None#";
+			}
+			if (DFS(from, target, visit, pred, ref found))
+            {
+				path.Add(currentNode);
+				while (pred[findIdxInNodes(currentNode)] != "#None#")
+				{ //Jika node bukan merupakan node from, maka proses akan diteruskan (karena node from predecessornya adalah "#None#"
+					path.Add(pred[findIdxInNodes(currentNode)]);
+					currentNode = pred[findIdxInNodes(currentNode)]; //berjalan mundur
+				}
+			}
+        }
+
 		path.Reverse(); //dibalik agar kemudahan printing result
 		return path;
 
@@ -111,4 +137,23 @@ public class Graph
 
 		return false;
 	}
+
+	public Boolean DFS(string from, string target, Boolean[] visit,string[] pred ,ref Boolean found)
+    {
+		//Penerapan algoritma BFS
+		//Cara kerja (dalam konteks pencarian path) hampir sama dengan BFS.
+		visit[findIdxInNodes(from)] = true; //ditandai bahwa node from sudah dikunjungi
+		foreach (var val in pointingTo[findIdxInNodes(from)]) //traversal adjascent node
+        {
+			if (!visit[findIdxInNodes(val)]) //jika belum dikunjungi, maka diproses
+            {
+				pred[findIdxInNodes(val)] = from; //dicatat predecessornya
+				DFS(val, target, visit, pred, ref found); //rekursif
+				if (val == target){
+					found = true; //jika ketemu, maka mengganti variable found menjadi true
+				}
+			}
+        }
+		return found;
+    }
 }
