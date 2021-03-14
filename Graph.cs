@@ -63,14 +63,31 @@ public class Graph
 		return false;
     }
 
-	public List<string> SearchPathWithBFS(string from, string target){
-
+	public List<string> SearchPath(string from, string target){
+		string []pred = new string[totalnode];
 		List<string> path = new List<string>(); //seperti namanya, list ini adalah jalur dari from ke target
+		string currentNode = target;
+
+		if (BFS(from, target, pred)) {
+			path.Add(currentNode);
+			while (pred[findIdxInNodes(currentNode)] != "None")
+            {
+				path.Add(pred[findIdxInNodes(currentNode)]);
+				currentNode = pred[findIdxInNodes(currentNode)];
+            }
+		}
+		path.Reverse();
+		return path;
+
+    }
+
+	public Boolean BFS(string from, string target, string []pred){
 		string first; //untuk traversal saja, ignore this
-		Boolean found = false; //boolean apakah target ditemukan atau tidak
 		bool[] visit = new bool[totalnode]; //menandai apakah node-node telah dikunjungi atau tidak
+		List<string> list;
 		for (int i = 0; i < totalnode; i++){
 			visit[i] = false; //default value : false
+			pred[i] = "None";
 		}
 
 		// antrian node untuk dikunjungi
@@ -80,36 +97,29 @@ public class Graph
 		visit[findIdxInNodes(from)] = true;
 		queue.Add(from);
 
-		while (queue.Count!=0 && !found){
+		while (queue.Count!=0){
 
 			// Dequeue, masukkan ke path
 			first = queue.First();
-			if (path.Count != 0)
-            {
-				if (isConnected(path[path.Count-1], first))
-					path.Add(first);
-			}
-            else
-            {
-				path.Add(first);
-			}
 			queue.RemoveAt(0);
-			if (first == target)
-			{ //Jika ketemu, maka found=true
-				found = true;
-				break;
-			}
+			
 			// Melist pontingTo agar diproses ; in short mencari tetangga dari node tsb.
-			List<string> list = pointingTo[findIdxInNodes(first)];
+			list = pointingTo[findIdxInNodes(first)];
 
 			foreach (var val in list){
 				if (!visit[findIdxInNodes(val)]){
 					visit[findIdxInNodes(val)] = true;
+					pred[findIdxInNodes(val)] = first;
 					queue.Add(val);
+
+					if (val == target)
+					{ //Jika ketemu, maka found=true
+						return true;
+					}
 				}
 			}
 		}
 
-		return path;
+		return false;
 	}
 }

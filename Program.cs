@@ -25,10 +25,7 @@ namespace graph
             g.NewEdge("E", "F");
             g.NewEdge("F", "H");
 
-            Console.Write("Following is Breadth First " +
-                          "Traversal(starting from " +
-                          "vertex 2)\n");
-            test = g.SearchPathWithBFS("A","H");
+            test = g.SearchPath("A","H");
             foreach (var val in test)
             {
                 Console.Write(val + " ");
