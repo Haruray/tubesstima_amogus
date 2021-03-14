@@ -25,7 +25,7 @@ namespace graph
             g.NewEdge("E", "F");
             g.NewEdge("F", "H");
 
-            test = g.SearchPath("A","H");
+            test = g.SearchPathWithBFS("A","H");
             foreach (var val in test)
             {
                 Console.Write(val + " ");

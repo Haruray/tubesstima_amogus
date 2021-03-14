@@ -43,40 +43,31 @@ public class Graph
 		if (!nodes.Contains(thisNode)){
 			nodes.Add(thisNode);
 		}
-		if (!nodes.Contains(toNode))
-        {
+		if (!nodes.Contains(toNode)){
 			nodes.Add(toNode);
         }
 
 		pointingTo[findIdxInNodes(thisNode)].Add(toNode);
-		pointingTo[findIdxInNodes(thisNode)].Sort();
+		pointingTo[findIdxInNodes(thisNode)].Sort(); //Diurutkan berdasarkan abjad
 	}
 
-	public Boolean isConnected(string from, string target){
-		foreach (var val in pointingTo[findIdxInNodes(from)])
-        {
-			if (target == val)
-            {
-				return true;
-            }
-        }
-		return false;
-    }
+	public List<string> SearchPathWithBFS(string from, string target){
+		//Mencari jalur terpendek dari node from ke target dengan BFS
+		//Cara kerjanya adalah mencatat predecessor dari iterasi tiap node yang dicari oleh BFS, kemudian kita mencari path nya secara mundur,
+		//yaitu mulai target hingga from
 
-	public List<string> SearchPath(string from, string target){
-		string []pred = new string[totalnode];
+		string []pred = new string[totalnode]; //predecessor
 		List<string> path = new List<string>(); //seperti namanya, list ini adalah jalur dari from ke target
-		string currentNode = target;
+		string currentNode = target; //node yang sedang diproses
 
-		if (BFS(from, target, pred)) {
+		if (BFS(from, target, pred)) { //jika target ditemukan oleh algoritma BFS, maka proses pencarian path dimulai
 			path.Add(currentNode);
-			while (pred[findIdxInNodes(currentNode)] != "None")
-            {
+			while (pred[findIdxInNodes(currentNode)] != "#None#"){ //Jika node bukan merupakan node from, maka proses akan diteruskan (karena node from predecessornya adalah "#None#"
 				path.Add(pred[findIdxInNodes(currentNode)]);
-				currentNode = pred[findIdxInNodes(currentNode)];
+				currentNode = pred[findIdxInNodes(currentNode)]; //berjalan mundur
             }
 		}
-		path.Reverse();
+		path.Reverse(); //dibalik agar kemudahan printing result
 		return path;
 
     }
@@ -87,7 +78,7 @@ public class Graph
 		List<string> list;
 		for (int i = 0; i < totalnode; i++){
 			visit[i] = false; //default value : false
-			pred[i] = "None";
+			pred[i] = "#None#";
 		}
 
 		// antrian node untuk dikunjungi
@@ -98,7 +89,6 @@ public class Graph
 		queue.Add(from);
 
 		while (queue.Count!=0){
-
 			// Dequeue, masukkan ke path
 			first = queue.First();
 			queue.RemoveAt(0);
@@ -112,8 +102,7 @@ public class Graph
 					pred[findIdxInNodes(val)] = first;
 					queue.Add(val);
 
-					if (val == target)
-					{ //Jika ketemu, maka found=true
+					if (val == target){ //Jika ketemu, maka akan return true
 						return true;
 					}
 				}
