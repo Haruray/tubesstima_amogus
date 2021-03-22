@@ -18,3 +18,10 @@ C:\Users\SAFIQ FARAY\source\repos\testing\testing\obj\Debug\tubesstima.exe.manif
 C:\Users\SAFIQ FARAY\source\repos\testing\testing\obj\Debug\tubesstima.application
 C:\Users\SAFIQ FARAY\source\repos\testing\testing\obj\Debug\tubesstima.exe
 C:\Users\SAFIQ FARAY\source\repos\testing\testing\obj\Debug\tubesstima.pdb
+C:\Users\Stella\Desktop\stima\tubesstima_amogus\testing\obj\Debug\testing.csprojAssemblyReference.cache
+C:\Users\Stella\Desktop\stima\tubesstima_amogus\testing\obj\Debug\tubesstima.Form1.resources
+C:\Users\Stella\Desktop\stima\tubesstima_amogus\testing\obj\Debug\tubesstima.Properties.Resources.resources
+C:\Users\Stella\Desktop\stima\tubesstima_amogus\testing\obj\Debug\testing.csproj.GenerateResource.cache
+C:\Users\Stella\Desktop\stima\tubesstima_amogus\testing\obj\Debug\testing.csproj.CoreCompileInputs.cache
+C:\Users\Stella\Desktop\stima\tubesstima_amogus\testing\obj\Debug\tubesstima.exe
+C:\Users\Stella\Desktop\stima\tubesstima_amogus\testing\obj\Debug\tubesstima.pdb
