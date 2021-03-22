@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -23,7 +23,9 @@ namespace tubesstima
     {
         string[] input;
         string method;
-        Graph g = new Graph(3);
+        int size;
+        Graph g;
+
         public Form1()
         {
             InitializeComponent();
@@ -53,14 +55,30 @@ namespace tubesstima
         private void button2_Click(object sender, EventArgs e)
         {
             //upload button
+            
             File.Copy(textBox1.Text, Path.Combine(Directory.GetCurrentDirectory(), Path.GetFileName(textBox1.Text)), true);
             input = File.ReadAllLines(Path.Combine(Directory.GetCurrentDirectory(), Path.GetFileName(textBox1.Text)));
-            textBox1.Text = input[0];
-
-            g.NewEdge("A", "B");
-            g.NewEdge("B", "C");
-            g.NewEdge("A", "C");
-            List<string> test = g.SearchPath("A", "C", "BFS");
+            string alltext = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), Path.GetFileName(textBox1.Text)));
+            int graphSize = alltext.Distinct().Count();
+            size = Int32.Parse(input[0]);
+            g = new Graph(graphSize);
+            string[] temp1 = new string[size];
+            string[] temp2 = new string[size];
+            int j = 0;
+            for (int i = 1; i < size; i++)
+            {
+                string[] row = input[i].Split(' ');
+                temp1[j] = row[0];
+                temp2[j] = row[1];
+                j++;
+            }
+            textBox1.Text = temp1[0];
+            for (int i = 0; i < size - 1; i++)
+            {
+                g.NewEdge(temp1[i], temp2[i]);
+            }
+            
+            List<string> test = g.SearchPath("A", "B", "BFS");
             //create a form 
             //System.Windows.Forms.Form form = Form.ActiveForm;
             //create a viewer object 
@@ -81,23 +99,12 @@ namespace tubesstima
             //bind the graph to the viewer 
             //associate the viewer with the form 
             //form.FormBorderStyle = 
-            /*
-            using (Graphics gfx = form.CreateGraphics())
-            {
-                    Bitmap bmp = new Bitmap(form.Width-700, form.Height-50, gfx);
-                Bitmap bmp1;
-                    form.DrawToBitmap(bmp, new Rectangle(10, 10, form.Width-700, form.Height-50));
-                bmp.Save("graph.png");
-                pictureBox1.Image = bmp;
-            }
-            */
             //Microsoft.Msagl.Drawing.SvgGraphWriter.Write(graph, @"C:\Users\SAFIQ FARAY\source\repos\testing\testing\bin\Debug\graph.svg");
             int width = 150;
             Bitmap bitmap = new Bitmap(width, (int)(graph.Height * (width / graph.Width)), System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
             renderer.Render(bitmap);
             bitmap.Save("graph.png");
             pictureBox1.Image = bitmap;
-
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -120,6 +127,11 @@ namespace tubesstima
         {
             //dfs
             method = "DFS";
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
