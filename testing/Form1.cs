@@ -25,17 +25,21 @@ namespace tubesstima
         string method = "BFS";
         string prevAccount = "";
         string prevExplore = "";
+        string outputTemplate;
+
         GraphKita g;
-        Microsoft.Msagl.Drawing.Graph graph = new Microsoft.Msagl.Drawing.Graph("graph");
+        Microsoft.Msagl.Drawing.Graph graph;
         TextHandler textData = new TextHandler();
         public Form1()
         {
             InitializeComponent();
+            outputTemplate = textBox2.Text;
         }
 
         private void printGraph()
         {
             Microsoft.Msagl.GraphViewerGdi.GraphRenderer renderer = new Microsoft.Msagl.GraphViewerGdi.GraphRenderer(graph);
+            //graph.Attr.  .ArrowheadAtTarget = ArrowStyle.None;
             renderer.CalculateLayout();
 
             int width = 150;
@@ -61,59 +65,153 @@ namespace tubesstima
                 textBox1.Text = open.FileName;
             }
         }
+        private void instantSearch()
+        {
+            //no button, just instant search
+            if (!(comboBox1.SelectedItem == null || comboBox2.SelectedItem == null))
+            {
+                for (int i = 0; i < textData.getTotalPeople(); i++)
+                {
+                    graph.FindNode(textData.getPerson(i)).Attr.FillColor = Microsoft.Msagl.Drawing.Color.White;
+                    graph.FindNode(textData.getPerson(i)).Attr.Shape = Microsoft.Msagl.Drawing.Shape.Octagon;
+                }
 
+                List<string> test = g.SearchPath(comboBox1.SelectedItem.ToString(), comboBox2.SelectedItem.ToString(), method);
+                textBox2.Text = "Nama akun: " + comboBox1.SelectedItem.ToString() + " dan " + comboBox2.SelectedItem.ToString() + "\r\n";
+
+
+                if (test[test.Count - 1] != "")
+                {
+                    if (test.Count == 1) textBox2.Text += ("1st - degree connection\r\n");
+                    else if (test.Count == 2) textBox2.Text += ("2nd - degree connection\r\n");
+                    else if (test.Count == 3) textBox2.Text += ("3rd - degree connection\r\n");
+                    else textBox2.Text += (test.Count + "th - degree connection\r\n");
+                    for (int i = 0; i < test.Count; i++)
+                    {
+                        graph.FindNode(test[i]).Attr.FillColor = Microsoft.Msagl.Drawing.Color.Red;
+                        if (i == 0) graph.FindNode(test[i]).Attr.FillColor = Microsoft.Msagl.Drawing.Color.LightBlue;
+                        textBox2.Text += (test[i]);
+                        if (i != test.Count - 1) textBox2.Text += (" → ");
+                    }
+                    graph.FindNode(test[0]).Attr.Shape = Microsoft.Msagl.Drawing.Shape.Diamond;
+                    graph.FindNode(test[test.Count - 1]).Attr.Shape = Microsoft.Msagl.Drawing.Shape.Diamond;
+                }
+                else
+                {
+                    textBox2.Text += ("tidak ada relasi pada kedua akun\r\n");
+                    graph.FindNode(test[0]).Attr.FillColor = Microsoft.Msagl.Drawing.Color.LightBlue;
+                    graph.FindNode(test[test.Count - 2]).Attr.FillColor = Microsoft.Msagl.Drawing.Color.Red;
+                    graph.FindNode(test[0]).Attr.Shape = Microsoft.Msagl.Drawing.Shape.Diamond;
+                    graph.FindNode(test[test.Count - 2]).Attr.Shape = Microsoft.Msagl.Drawing.Shape.Diamond;
+                }
+
+                printGraph();
+            }
+        }
         private void button3_Click(object sender, EventArgs e)
         {
+            //friend recommendation button
+            List<string> userFriends = new List<string>();
+            List<List<string>> userRecommendFriends = new List<List<string>>();
+            List<string> rangeTest;
+            bool hasFriendRecommend = false;
             for (int i = 0; i < textData.getTotalPeople(); i++)
             {
-                graph.FindNode(textData.getPerson(i)).Attr.FillColor = Microsoft.Msagl.Drawing.Color.White;
+                rangeTest = g.SearchPath(comboBox1.SelectedItem.ToString(), textData.getPerson(i), "BFS");
+                if (rangeTest.Count == 2 && rangeTest[rangeTest.Count - 1] != "")
+                {
+                    userFriends.Add(rangeTest[rangeTest.Count - 1]);
+                }
             }
 
-                //search button
-                List<string> test = g.SearchPath(comboBox1.SelectedItem.ToString(), comboBox2.SelectedItem.ToString(), method);
-
-            for (int i = 0; i < test.Count; i++)
+            for (int i = 0; i < userFriends.Count; i++)
             {
-                graph.FindNode(test[i]).Attr.FillColor = Microsoft.Msagl.Drawing.Color.Red;
+                textBox2.Text += "Nama akun: " + userFriends[i] + "\r\n";
+                userRecommendFriends.Add(new List<string>());
+                for (int j = 0; j < textData.getTotalPeople(); j++)
+                {
+                    rangeTest = g.SearchPath(userFriends[i], textData.getPerson(j), "BFS");
+                    if (rangeTest.Count == 2 && rangeTest[rangeTest.Count - 1] != "" && !(rangeTest[rangeTest.Count - 1].Equals(comboBox1.SelectedItem.ToString())) && !(userFriends.Contains(rangeTest[rangeTest.Count - 1])) )
+                    {
+                        userRecommendFriends[i].Add(rangeTest[rangeTest.Count - 1]);
+                        textBox2.Text += rangeTest[rangeTest.Count - 1] + "\r\n";
+                        hasFriendRecommend = true;
+                    }
+                }
             }
-            printGraph();
+
+            if (hasFriendRecommend)
+            {
+                textBox2.Text = "Daftar rekomendasi teman untuk akun " + comboBox1.SelectedItem.ToString() + ": \r\n";
+                for (int i = 0; i < userFriends.Count; i++)
+                {
+                    textBox2.Text += "Nama akun: " + userFriends[i] + "\r\n";
+                    for (int j = 0; j < userRecommendFriends[i].Count; j++)
+                    {
+                        textBox2.Text += userRecommendFriends[i][j] + "\r\n";
+                    }
+                }
+            }
+            else
+            {
+                textBox2.Text = "Tidak ada rekomendasi teman yang relevan, coba berteman dengan lebih banyak orang lagi a.k.a tidak no life";
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             //upload button
-            textData.Load(textBox1.Text);
-            g = new GraphKita(textData.getTotalConnection());
-            File.Copy(textBox1.Text, Path.Combine(Directory.GetCurrentDirectory(), Path.GetFileName(textBox1.Text)), true);
-            input = File.ReadAllLines(Path.Combine(Directory.GetCurrentDirectory(), Path.GetFileName(textBox1.Text)));
-            textBox1.Text = input[0];
+            if (!(textBox1.Text.Equals("")))
+            {
+                //for (int i = 0; i < textData.getTotalPeople(); i++) graph.RemoveNode(graph.FindNode(textData.getPerson(i)));
+                //g.Clear();
+                textData = new TextHandler();
+                prevAccount = "";
+                prevExplore = "";
+                comboBox1.Items.Clear();
+                comboBox2.Items.Clear();
+                textData.Load(textBox1.Text);
+                graph = new Microsoft.Msagl.Drawing.Graph("graph");
+                g = new GraphKita(textData);
 
-            for (int i = 0; i < textData.getTotalConnection(); i++)
-            {
-                g.NewEdge(textData.getPerson(i, 0), textData.getPerson(i, 1));
-                graph.AddEdge(textData.getPerson(i, 0), textData.getPerson(i, 1));
-                //g.NewEdge(textData.getPerson(i, 1), textData.getPerson(i, 0));
-                //graph.AddEdge(textData.getPerson(i, 1), textData.getPerson(i, 0));
-            }
-            for (int i = 0; i < textData.getTotalPeople(); i++)
-            {
-                comboBox1.Items.Add(textData.getPerson(i));
-                comboBox2.Items.Add(textData.getPerson(i));
-            }
+                for (int i = 0; i < textData.getTotalConnection(); i++)
+                {
+                    g.NewEdge(textData.getFriendConnection(i)[0], textData.getFriendConnection(i)[1]);
+                    var edge = graph.AddEdge(textData.getFriendConnection(i)[0], textData.getFriendConnection(i)[1]);
+                    edge.Attr.ArrowheadAtSource = Microsoft.Msagl.Drawing.ArrowStyle.None;
+                    edge.Attr.ArrowheadAtTarget = Microsoft.Msagl.Drawing.ArrowStyle.None;
+                }
+                for (int i = 0; i < textData.getTotalPeople(); i++)
+                {
+                    comboBox1.Items.Add(textData.getPerson(i));
+                    comboBox2.Items.Add(textData.getPerson(i));
+                }
 
-            printGraph();
-            if ((textData.getTotalPeople() == 1))
-            {
-                comboBox1.SelectedItem = (textData.getPerson(0));
-                comboBox2.SelectedItem = (textData.getPerson(0));
-            }
-            else if ((textData.getTotalPeople() > 1))
-            {
-                comboBox1.SelectedItem = (textData.getPerson(0));
-                comboBox2.SelectedItem = (textData.getPerson(1));
 
-                comboBox1.Enabled = true;
-                comboBox2.Enabled = true;
+                if ((textData.getTotalPeople() == 1))
+                {
+                    comboBox1.SelectedItem = (textData.getPerson(0));
+                    comboBox2.SelectedItem = (textData.getPerson(0));
+                    button3.Enabled = true;
+                }
+                else if ((textData.getTotalPeople() > 1))
+                {
+                    comboBox1.SelectedItem = (textData.getPerson(0));
+                    comboBox2.SelectedItem = (textData.getPerson(1));
+
+                    comboBox1.Items.Remove(comboBox2.SelectedItem.ToString());
+                    comboBox2.Items.Remove(comboBox1.SelectedItem.ToString());
+                    comboBox1.Enabled = true;
+                    comboBox2.Enabled = true;
+                    button3.Enabled = true;
+                }
+                printGraph();
+                instantSearch();
+
+            }
+            else
+            {
+                Console.WriteLine("Path file tidak valid");
             }
         }
 
@@ -126,7 +224,8 @@ namespace tubesstima
             }
             prevAccount = comboBox1.SelectedItem.ToString();
             comboBox2.Items.Remove(comboBox1.SelectedItem.ToString());
-            
+            instantSearch();
+
         }
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
@@ -138,6 +237,7 @@ namespace tubesstima
             }
             prevExplore = comboBox2.SelectedItem.ToString();
             comboBox1.Items.Remove(comboBox2.SelectedItem.ToString());
+            instantSearch();
 
         }
 
@@ -145,12 +245,14 @@ namespace tubesstima
         {
             //bfs
             method = "BFS";
+            instantSearch();
         }
 
         private void radioButton2_CheckedChanged(object sender, EventArgs e)
         {
             //dfs
             method = "DFS";
+            instantSearch();
         }
 
         private void label5_Click(object sender, EventArgs e)
@@ -161,6 +263,26 @@ namespace tubesstima
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void panel2_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void label5_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        public void sendError(string error)
+        {
+            textBox2.Text = error;
         }
     }
 }

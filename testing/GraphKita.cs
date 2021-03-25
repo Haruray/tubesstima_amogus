@@ -10,23 +10,28 @@ namespace tubesstima
     {
 		private int totalnode; //jumlah node
 		private List<string> nodes; //list nama node
-		private List<string>[] pointingTo; //list of list of string, yang tiap index nya adalah node-node yg ditunjuk oleh node bersangkutan
-		//Misal
-		//nodes = ["A","B"]
-		//pointingTo = [ ["B","C"], ["A"] ]
-		//Berarti, node A menunjuk ke node B dan C, dst
-		//Maaf kalau keliru istilah. idgaf about istilah
+		private List<List<string>> pointingTo; //list of list of string, yang tiap index nya adalah node-node yg ditunjuk oleh node bersangkutan
+											   //Misal
+											   //nodes = ["A","B"]
+											   //pointingTo = [ ["A"], ["B"], ["C"] ]
+											   //Berarti, node A menunjuk ke node B dan C, dst
+											   //Maaf kalau keliru istilah. idgaf about istilah
 
-		public GraphKita(int size)
+		public GraphKita(TextHandler handler)
 		{
 			//ctor with size
 			nodes = new List<string>();
-			pointingTo = new List<string>[size];
-			for (int i = 0; i < pointingTo.Length; i++)
+			pointingTo = new List<List<string>>();
+			totalnode = handler.getTotalPeople();
+			for (int i = 0; i < handler.getTotalPeople(); i++)
 			{
-				pointingTo[i] = new List<string>();
+				pointingTo.Add(new List<string>());
+				pointingTo[i].Add(handler.getPerson(i));
+				nodes.Add(handler.getPerson(i));
+				//Console.WriteLine(pointingTo[i][0]);
 			}
-			totalnode = size;
+			//Console.WriteLine(pointingTo.Count);
+
 		}
 
 		private int findIdxInNodes(string value)
@@ -34,34 +39,43 @@ namespace tubesstima
 			//Mencari index dari this->nodes
 			//input adalah string node yg mau dicari
 			//output adalah index value dari list nodes
+			//Console.WriteLine(pointingTo[0][0]);
 			int i = 0;
-			foreach (var item in nodes)
+			while (i < nodes.Count())
 			{
-				if (string.Compare(item, value) == 0)
+				//Console.WriteLine(value + " = " + pointingTo[i][0] + " ?");
+				if (value.Equals(pointingTo[i][0]))
 				{
-					break;
+					//Console.WriteLine("yes");
+					//Console.WriteLine(i);
+					//Console.WriteLine("---");
+					return i;
 				}
-				i++;
+				//Console.WriteLine("no");
+				i += 1;
 			}
 			return i;
+
 		}
 
 		public void NewEdge(string thisNode, string toNode)
 		{
 			//Menambah edge baru
-			if (!nodes.Contains(thisNode))
-			{
-				nodes.Add(thisNode);
-			}
-			if (!nodes.Contains(toNode))
-			{
-				nodes.Add(toNode);
-			}
 			nodes.Sort();
 			pointingTo[findIdxInNodes(thisNode)].Add(toNode);
-			pointingTo[findIdxInNodes(thisNode)].Sort(); //Diurutkan berdasarkan abjad
+			//pointingTo[findIdxInNodes(thisNode)].Sort(); //Diurutkan berdasarkan abjad
+			//Console.WriteLine(findIdxInNodes(toNode));
 			pointingTo[findIdxInNodes(toNode)].Add(thisNode);
-			pointingTo[findIdxInNodes(toNode)].Sort();
+			//pointingTo[findIdxInNodes(toNode)].Sort();
+			//Console.WriteLine(pointingTo[findIdxInNodes(thisNode)][0]);
+			//Console.WriteLine(pointingTo[findIdxInNodes(thisNode)][1]);
+			//Console.WriteLine("-----");
+		}
+
+		public void Clear()
+		{
+			//Hapus semua node
+			pointingTo.Clear();
 		}
 
 		public List<string> SearchPath(string from, string target, string with)
@@ -106,7 +120,13 @@ namespace tubesstima
 				}
 			}
 
-			path.Reverse(); //dibalik agar kemudahan printing result
+			path.Reverse(); //dibalik agar kemudahan printing result'
+			if(path.Count == 0)
+            {
+				path.Add(from);
+				path.Add(target);
+				path.Add("");
+			}
 			return path;
 
 		}

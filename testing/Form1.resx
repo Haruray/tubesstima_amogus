@@ -117,6 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="textBox2.Text" xml:space="preserve">
+    <value>How to use :
+Pilih dulu file yang ingin dibuka dengan membuka "browse", lalu klik refresh untuk memvisualisasikan hasil load dari file
+- "Choose Account" merupakan akunmu yang akan digunakan, dalam grafik akan diwarnai biru muda
+- "Explore friends with" merupakan fitur dimana kamu dapat mencari orang lain melalui teman teman terdekatmu
+- "Algoritma" merupakan cara path menemukan orang yang kamu cari dari explore friends tadi, path akan diwarnai merah
+- "Friend Recommendation" merupakan fitur untuk mencari orang yang mungkin kamu kenal karena memiliki mutual friends denganmu
+
+</value>
+  </data>
   <metadata name="bindingSource1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
