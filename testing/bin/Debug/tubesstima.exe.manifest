@@ -90,17 +90,26 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="tubesstima.exe" size="62472">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="tubesstima.exe" size="65544">
       <assemblyIdentity name="tubesstima" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>qcsWYrxA3qf68yay3pZIeF1hZjWRbdPpYHgO3o/yh8c=</dsig:DigestValue>
+        <dsig:DigestValue>oLq6qWdl/x31XEoF134+Klpt5MEtxiqcPLN+4JhHcEM=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
+  <file name="Amogus.txt" size="77">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>cnew3fk3e4kZcG46yXgphfs0gN0nNfkfJy0B1f59zOU=</dsig:DigestValue>
+    </hash>
+  </file>
   <file name="tubesstima.exe.config" size="189">
     <hash>
       <dsig:Transforms>
