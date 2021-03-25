@@ -146,7 +146,14 @@ namespace tubesstima
                 for (int i = 0; i < userFriends.Count; i++)
                 {
                     textBox2.Text += "Nama akun: " + userFriends[i] + "\r\n";
-                    textBox2.Text += userRecommendFriends[i].Count + " mutual friends:" + "\r\n";
+                    if (userRecommendFriends[i].Count != 0)
+                    {
+                        textBox2.Text += userRecommendFriends[i].Count + " mutual friends:" + "\r\n";
+                    }
+                    else
+                    {
+                        textBox2.Text += "0 mutual friends." + "\r\n";
+                    }
                     for (int j = 0; j < userRecommendFriends[i].Count; j++)
                     {
                         textBox2.Text += userRecommendFriends[i][j] + "\r\n";
