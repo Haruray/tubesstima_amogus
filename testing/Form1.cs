@@ -23,6 +23,8 @@ namespace tubesstima
     {
         string[] input;
         string method = "BFS";
+        string prevAccount = "";
+        string prevExplore = "";
         GraphKita g;
         Microsoft.Msagl.Drawing.Graph graph = new Microsoft.Msagl.Drawing.Graph("graph");
         TextHandler textData = new TextHandler();
@@ -100,18 +102,43 @@ namespace tubesstima
             }
 
             printGraph();
-            
+            if ((textData.getTotalPeople() == 1))
+            {
+                comboBox1.SelectedItem = (textData.getPerson(0));
+                comboBox2.SelectedItem = (textData.getPerson(0));
+            }
+            else if ((textData.getTotalPeople() > 1))
+            {
+                comboBox1.SelectedItem = (textData.getPerson(0));
+                comboBox2.SelectedItem = (textData.getPerson(1));
+
+                comboBox1.Enabled = true;
+                comboBox2.Enabled = true;
+            }
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             //select account
-
+            if (!(prevAccount.Equals("")))
+            {
+                comboBox2.Items.Add(prevAccount);
+            }
+            prevAccount = comboBox1.SelectedItem.ToString();
+            comboBox2.Items.Remove(comboBox1.SelectedItem.ToString());
+            
         }
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
             //explore friends with
+            if (!(prevExplore.Equals("")))
+            {
+                comboBox1.Items.Add(prevExplore);
+            }
+            prevExplore = comboBox2.SelectedItem.ToString();
+            comboBox1.Items.Remove(comboBox2.SelectedItem.ToString());
+
         }
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
