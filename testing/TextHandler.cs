@@ -15,7 +15,7 @@ namespace tubesstima
     {
         private string[] textLine;
         private string[][] friendConnection;
-        private int totalConnection;
+        private int totalConnection = 0;
         private List<string> person = new List<string>();
         private int totalPeople = 0;
         //public string[,] ServicePoint = new string[10, 9];
@@ -23,7 +23,8 @@ namespace tubesstima
         public void Load(string fileTarget)
         {
             textLine = File.ReadAllLines(fileTarget);
-            if (textLine[0].Equals((textLine.Length - 1).ToString())) {
+            if (textLine[0].Equals((textLine.Length - 1).ToString()))
+            {
                 //Console.WriteLine(textLine[0]);
 
                 for (int i = 0; i < textLine.Length - 1; i++)
@@ -87,20 +88,20 @@ namespace tubesstima
                         //Console.WriteLine(textLine[i].Split(' ')[0] + " " + textLine[i].Split(' ')[1] + " <- Ini sudah terdapat dalam connection");
                     }
                 }
-
-                for (int i = 0; i < totalConnection - 1; i++)
+                for (int i = 0; i < totalConnection; i++)
                 {
                     if (!(person.Contains(friendConnection[i][0])))
                     {
+                        //Console.WriteLine("Add : " + friendConnection[i][0] + " Dari Kiri");
                         person.Add(friendConnection[i][0]);
                     }
                     if (!(person.Contains(friendConnection[i][1])))
                     {
+                        //Console.WriteLine("Add : " + friendConnection[i][1] + " Dari Kanan");
                         person.Add(friendConnection[i][1]);
                     }
                 }
                 totalPeople = person.Count;
-
             }
             else
             {
@@ -108,13 +109,35 @@ namespace tubesstima
             }
         }
 
+        public int getPersonFriend(int idx)
+        {
+            int jumlah = 0;
+            for (int i = 0; i < totalConnection; i++)
+            {
+                if (getFriendConnection(i)[0].Equals(getPerson(idx)))
+                {
+                    jumlah += 1;
+                }
+
+                if (getFriendConnection(i)[1].Equals(getPerson(idx)))
+                {
+                    jumlah += 1;
+                }
+            }
+            return jumlah;
+        }
         public int getTotalConnection()
         {
             return totalConnection;
         }
-        public string getPerson(int idx, int pos)
+        public string[] getFriendConnection(int idx)
         {
-            return friendConnection[idx][pos];
+            string[] tempFriendConnection = new string[2];
+
+            tempFriendConnection[0] = friendConnection[idx][0];
+            tempFriendConnection[1] = friendConnection[idx][1];
+
+            return tempFriendConnection;
         }
         public int getTotalPeople()
         {
@@ -123,6 +146,14 @@ namespace tubesstima
         public string getPerson(int idx)
         {
             return person[idx];
+        }
+        public int getPersonId(string name)
+        {
+            for (int i = 0; i < getTotalPeople(); i++)
+            {
+                if (person[i].Equals(name)) return i;
+            }
+            return -1;
         }
     }
 }
