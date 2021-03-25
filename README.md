@@ -47,6 +47,6 @@ project sudah selesai
 Created by 
 - Bryan Rinaldo 13519103
 - Safiq Faray 13519145
-- Farrel Abieza Zidan 13519182
+- Farrell Abieza Zidan 13519182
 
 Source code berada di directory /testing/testing
