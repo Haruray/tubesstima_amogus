@@ -17,15 +17,15 @@ Kami diberikan Tugas untuk membuat sebuah mesin pencarian teman yang menggunakan
 
 
 ## Setup
-program ini dapat dijalankan dengan beberapa syarat : 
-- install python (https://www.python.org/downloads/)
-- install 
+program ini dapat dijalankan dengan syarat : 
+- Windows sudah up to date
+- Jika tidak bisa coba install .NET Framework (https://dotnet.microsoft.com/download/dotnet-framework)
 
 
 ## How to Run
 cara menjalankan program : 
 1. Buka directory bin
-2. klik 2 kali pada file yang ada pada bin
+2. klik 2 kali pada file exe yang ada pada bin
 3. Program siap digunakan
 
 ## Features
@@ -33,6 +33,8 @@ Fitur yang terdapat dalam program ini
 * Upload file dengan format .txt
 * Pencarian teman dengan menggunakan BFS
 * Pencarian teman dengan menggunakan DFS
+* Mencari jalur dari node yang ada
+* Menggambarkan Graph 
 * Friend recommendation berdasarkan mutual friends 
 
 ## Status
@@ -48,5 +50,3 @@ Created by
 - Bryan Rinaldo 13519103
 - Safiq Faray 13519145
 - Farrell Abieza Zidan 13519182
-
-Source code berada di directory /testing/testing
