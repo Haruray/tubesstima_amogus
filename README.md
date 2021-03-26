@@ -25,7 +25,7 @@ program ini dapat dijalankan dengan syarat :
 ## How to Run
 cara menjalankan program : 
 1. Buka directory bin
-2. klik 2 kali pada file exe yang ada pada bin
+2. klik 2 kali pada file tubesstima.exe yang ada pada bin
 3. Program siap digunakan
 
 ## Features
